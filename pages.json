@@ -8,7 +8,16 @@
 				
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/addpw/addpw",
+            "style" :                                                                                    
+            {
+                "navigationStyle": "custom",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",

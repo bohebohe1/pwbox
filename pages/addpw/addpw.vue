@@ -8,7 +8,7 @@
 		</view>
 		<view class="main">
 					<input class="titleinput" type="text" placeholder="请输入标题" :value="title" @input="titlefn"/>
-					<input class="titleinput" type="text" placeholder="输入用户名" :value="usernum" @input="usernumfn" />
+					<input class="titleinput" type="text" placeholder="输入用户名" :value="username" @input="usernamefn" />
 					<input class="titleinput" type="password" placeholder="请输入密码" :value="password" @input="passwordfn" />
 					<textarea class="titleinput" cols="2" rows="6" style="overflow:hidden;height:150px;" placeholder="请输入备注" @input="ramarkfn" :value="ramark"></textarea>
 					<view class="sumbitbtn" @click="submitbtn"> 
@@ -23,9 +23,10 @@
 		data() {
 			return {
 				title: '',
-				usernum: '',
+				username: '',
 				password: '',
 				ramark: '',
+				createdtime: '',
 				Storage_data: []
 			}
 		},
@@ -33,8 +34,8 @@
 			titlefn:function(e){
 				this.title = e.target.value;
 			},
-			usernumfn:function(e){
-				this.usernum = e.target.value;
+			usernamefn:function(e){
+				this.username = e.target.value;
 			},
 			passwordfn:function(e){
 				this.password = e.target.value;
@@ -43,7 +44,10 @@
 				this.ramark = e.target.value;
 			},
 			submitbtn() {
-				if(this.title == '' || this.usernum == '' || this.password == '' || this.ramark == '') {
+				var time = new Date()
+				this.createdtime= time.getFullYear() + '年' + (time.getMonth() + 1) + '月' + time.getDate() + '日'
+				console.log(this.createdtime)
+				if(this.title == '' || this.username == '' || this.password == '' || this.ramark == '') {
 					uni.showToast({
 					    title: '请输入完整内容',
 						icon:'none',
@@ -51,22 +55,23 @@
 					});
 					return
 				}
-				uni.getStorage({
-				    key: 'storage_key',
-				    success: function (res) {
-				        console.log(res,"res");
-				        this.Storage_data = JSON.parse(res.data);
-						console.log(this.Storage_data)
-						this.Storage_data.push({
-							title: this.title,
-							usernum: this.usernum,
-							password: this.password,
-							ramark: this.ramark
-						})
-						// this.Storage_data = JSON.stringify(this.Storage_data)
-				    }
+				if(uni.getStorageSync('storage_key')){
+					this.Storage_data = JSON.parse(uni.getStorageSync('storage_key'))
+				}else {
+					this.Storage_data = []
+				}
+				this.Storage_data.push({
+					title: this.title,
+					username: this.username,
+					password: this.password,
+					ramark: this.ramark,
+					createdtime: this.createdtime
+				})
+				var ss = JSON.stringify(this.Storage_data)
+				uni.setStorageSync('storage_key',ss)
+				uni.navigateTo({
+					url: '/pages/index/index',
 				});
-				// uni.setStorage({key: 'storage_key',data: this.Storage_data})
 			}
 		}
 	}
