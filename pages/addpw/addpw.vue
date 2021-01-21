@@ -7,18 +7,19 @@
 			<text style="margin-left: 10rpx;">新增密码</text>
 		</view>
 		<view class="main">
-					<input class="titleinput" type="text" placeholder="请输入标题" :value="title" @input="titlefn"/>
-					<input class="titleinput" type="text" placeholder="输入用户名" :value="username" @input="usernamefn" />
-					<input class="titleinput" type="password" placeholder="请输入密码" :value="password" @input="passwordfn" />
-					<textarea class="titleinput" cols="2" rows="6" style="overflow:hidden;height:150px;" placeholder="请输入备注" @input="ramarkfn" :value="ramark"></textarea>
-					<view class="sumbitbtn" @click="submitbtn"> 
-						添加密码
-					</view>
+			<input class="titleinput" type="text" placeholder="请输入标题" :value="title" @input="titlefn"/>
+			<input class="titleinput" type="text" placeholder="输入用户名" :value="username" @input="usernamefn" />
+			<input class="titleinput" type="password" placeholder="请输入密码" :value="password" @input="passwordfn" />
+			<textarea class="titleinput" cols="2" rows="6" style="overflow:hidden;height:150px;" placeholder="请输入备注" @input="ramarkfn" :value="ramark"></textarea>
+			<view class="sumbitbtn" @click="submitbtn"> 
+				添加密码
+			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	import {openSqlite,userInfoSQL,addUserInformation} from '../../sqlite.js'
 	export default {
 		data() {
 			return {
@@ -30,7 +31,14 @@
 				Storage_data: []
 			}
 		},
+		onShow (){
+			this.init()
+		},
 		methods: {
+			init() {
+				openSqlite().then(res=>{}),
+				userInfoSQL().then(res=>{})
+			},
 			titlefn:function(e){
 				this.title = e.target.value;
 			},
@@ -45,8 +53,8 @@
 			},
 			submitbtn() {
 				var time = new Date()
-				this.createdtime= time.getFullYear() + '年' + (time.getMonth() + 1) + '月' + time.getDate() + '日'
-				console.log(this.createdtime)
+				// this.createdtime = time
+				this.createdtime = time.getFullYear() + '年' + (time.getMonth() + 1) + '月' + time.getDate() + '日'
 				if(this.title == '' || this.username == '' || this.password == '' || this.ramark == '') {
 					uni.showToast({
 					    title: '请输入完整内容',
@@ -55,23 +63,35 @@
 					});
 					return
 				}
-				if(uni.getStorageSync('storage_key')){
-					this.Storage_data = JSON.parse(uni.getStorageSync('storage_key'))
-				}else {
-					this.Storage_data = []
-				}
-				this.Storage_data.push({
-					title: this.title,
-					username: this.username,
-					password: this.password,
-					ramark: this.ramark,
+				// 存储数据
+				addUserInformation({
+					id:this.title,
+					name: this.username,
+					gender: this.password,
+					avatar:this.ramark,
 					createdtime: this.createdtime
-				})
-				var ss = JSON.stringify(this.Storage_data)
-				uni.setStorageSync('storage_key',ss)
-				uni.navigateTo({
-					url: '/pages/index/index',
-				});
+				}).then(res=>{
+					uni.navigateBack({
+						delta:1
+					});
+				})				
+				// if(uni.getStorageSync('storage_key')){
+				// 	this.Storage_data = JSON.parse(uni.getStorageSync('storage_key'))
+				// }else {
+				// 	this.Storage_data = []
+				// }
+				// this.Storage_data.push({
+				// 	title: this.title,
+				// 	username: this.username,
+				// 	password: this.password,
+				// 	ramark: this.ramark,
+				// 	createdtime: this.createdtime
+				// })
+				// var ss = JSON.stringify(this.Storage_data)
+				// uni.setStorageSync('storage_key',ss)
+				// uni.navigateTo({
+				// 	url: '/pages/index/index',
+				// });
 			}
 		}
 	}

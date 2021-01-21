@@ -17,6 +17,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/editpw/editpw",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
