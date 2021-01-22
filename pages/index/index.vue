@@ -59,7 +59,6 @@
 			},
 			init(){
 				selectInformationType('userInfo').then(res=>{
-					console.log(res,'3')
 					this.storagedata = res
 				})
 			},
@@ -71,6 +70,8 @@
 			addpassword() {
 				uni.navigateTo({
 					url: '/pages/addpw/addpw',
+					animationType: 'zoom-fade-out',
+					animationDuration: 1000
 				});
 			},
 			// 修改密码
@@ -85,7 +86,7 @@
 
 <style>
 	.status_bar{
-		height: 20rpx;
+		height: 40rpx;
 		width: 100%;
 	}
 	.addpsd{

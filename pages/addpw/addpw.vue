@@ -4,13 +4,13 @@
 			<!-- 这里是状态栏 -->
 		</view>
 		<view class="addpsd">
-			<text style="margin-left: 10rpx;">新增密码</text>
+			<text style="margin-left: 20rpx;">新增密码</text>
 		</view>
 		<view class="main">
 			<input class="titleinput" type="text" placeholder="请输入标题" :value="title" @input="titlefn"/>
 			<input class="titleinput" type="text" placeholder="输入用户名" :value="username" @input="usernamefn" />
-			<input class="titleinput" type="password" placeholder="请输入密码" :value="password" @input="passwordfn" />
-			<textarea class="titleinput" cols="2" rows="6" style="overflow:hidden;height:150px;" placeholder="请输入备注" @input="ramarkfn" :value="ramark"></textarea>
+			<input class="titleinput" type="text" placeholder="请输入密码" :value="password" @input="passwordfn" />
+			<textarea class="titleinput" cols="2" rows="6" style="overflow:hidden;height:300rpx;" placeholder="请输入备注" @input="ramarkfn" :value="ramark"></textarea>
 			<view class="sumbitbtn" @click="submitbtn"> 
 				添加密码
 			</view>
@@ -53,7 +53,6 @@
 			},
 			submitbtn() {
 				var time = new Date()
-				// this.createdtime = time
 				this.createdtime = time.getFullYear() + '年' + (time.getMonth() + 1) + '月' + time.getDate() + '日'
 				if(this.title == '' || this.username == '' || this.password == '' || this.ramark == '') {
 					uni.showToast({
@@ -75,23 +74,6 @@
 						delta:1
 					});
 				})				
-				// if(uni.getStorageSync('storage_key')){
-				// 	this.Storage_data = JSON.parse(uni.getStorageSync('storage_key'))
-				// }else {
-				// 	this.Storage_data = []
-				// }
-				// this.Storage_data.push({
-				// 	title: this.title,
-				// 	username: this.username,
-				// 	password: this.password,
-				// 	ramark: this.ramark,
-				// 	createdtime: this.createdtime
-				// })
-				// var ss = JSON.stringify(this.Storage_data)
-				// uni.setStorageSync('storage_key',ss)
-				// uni.navigateTo({
-				// 	url: '/pages/index/index',
-				// });
 			}
 		}
 	}
@@ -99,34 +81,34 @@
 
 <style>
 	.status_bar{
-		height: 20rpx;
+		height: 40rpx;
 		width: 100%;
 	}
 	.addpsd{
 		width: 100%;
-		height: 50px;
+		height: 40rpx;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		border-bottom: #F1F1F1 2rpx solid;
 	}
 	.main{
-		padding: 0 5px;
+		padding: 0 10rpx;
 	}
 	.titleinput{
 		width: 100%;
-		height: 40px;
-		line-height: 40px;
-		border-bottom: 	#D3D3D3 1px solid;
+		height: 80rpx;
+		line-height: 80rpx;
+		border-bottom: 	#D3D3D3 2rpx solid;
 	}
 	.sumbitbtn{
 		width: 100%;
-		height: 40px;
+		height: 80rpx;
 		background: #007AFF;
-		border-radius: 10px;
+		border-radius: 20rpx;
 		text-align: center;
 		color: white;
-		line-height: 40px;
-		margin-top: 10px;
+		line-height: 80rpx;
+		margin-top: 20rpx;
 	}
 </style>

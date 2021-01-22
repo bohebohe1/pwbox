@@ -9,7 +9,6 @@ function openSqlite(){
 			name:'pop',  //数据库名称
 			path:'_doc/pop.db',   //数据库地址，uniapp推荐以下划线为开头，这到底存在哪里去了，我也不清楚，哈哈
 			success(e){
-				console.log('成功')
 				resolve(e); //成功回调
 			},
 			fail(e){
@@ -65,11 +64,9 @@ function addUserInformation(obj){
 					sql:'insert into userInfo(id,name,gender,avatar,createdtime) values("'+id+'","'+name+'","'+gender+'","'+avatar+'","'+createdtime+'")',
 					success(e){
 						resolve(e);
-						console.log(e,'succ')
 					},
 					fail(e){
 						reject(e);
-						console.log(e,'fail')
 					}
 				})
 			})
@@ -87,7 +84,6 @@ function addUserInformation(obj){
 //传的参数按1,3,5来传，传一个，传三个，传五个参数，不能只传两个或者四个
 function selectInformationType(name,aa,bb,cc,dd){
 	if(name !== undefined){
-		console.log('成功')
 		//第一个是表单名称，后两个参数是列表名，用来检索
 		if(aa !== undefined && cc !== undefined){
 			//两个检索条件
@@ -156,7 +152,7 @@ function modifyInformation(listName,name,cont,use,sel){
 	if(use == undefined){
 		sql ='update '+listName+' set '+name+'="'+cont+'"';
 	}else{
-		sql ='update '+listName+' set '+name+'="'+cont+'" where '+use+'="'+sel+'"';
+		sql ='update '+listName+' set '+name.id+'="'+cont.id+'",'+name.name+'="'+cont.name+'",'+name.gender+'="'+cont.gender+'",'+name.avatar+'="'+cont.avatar+'",'+name.createdtime+'="'+cont.createdtime+'" where '+use+'="'+sel+'"';
 	}
 	//where前面的是要修改的，后面的是条件，选择哪个
 	return new Promise((resolve,reject) =>{
