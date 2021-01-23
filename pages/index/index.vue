@@ -1,14 +1,18 @@
 <template>
-	<view class="">
+	<view class="all">
 		<view class="status_bar">
 			<!-- 这里是状态栏 -->
 		</view>
 		<view class="addpsd">
-			<text style="margin-left: 10rpx;">密码盒</text>
-			<image src="/static/add.png" @click="addpassword" mode="" style="display:block;width:48rpx;height: 48rpx;margin-right: 10rpx;"></image>
+			<text>密码盒</text>
+			<image src="/static/add.png" @click="addpassword" mode="" ></image>
+		</view>
+		<view class="searchview">
+			<input type="text" value="" placeholder="搜索账号密码" class="search"/>
 		</view>
 		<view class="contain">
-			<view v-for="item in storagedata" class="search" :style="{backgroundColor: bg()}" @click="editpw(item.list)">
+			<!-- <view v-for="item in storagedata" class="datalist" :style="{backgroundColor: bg()}" @click="editpw(item.list)"> -->
+			<!-- <view v-for="item in storagedata" class="datalist" @click="editpw(item.list)">
 				<view class="headview">
 					<view class="first">
 						{{item.id}}
@@ -25,6 +29,9 @@
 				<view class="" style="margin-right: 20px;font-size: 12px;">
 					{{item.createdtime}}
 				</view>
+			</view> -->
+			<view class="">
+				
 			</view>
 		</view>
 	</view>
@@ -84,27 +91,60 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
+	.all{
+		width: 100%;
+		height: 100vh;
+		background: #F8F8FA;
+	}
 	.status_bar{
 		height: 40rpx;
 		width: 100%;
 	}
 	.addpsd{
 		width: 100%;
-		height: 50px;
+		height: 100rpx;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		border-bottom: #F1F1F1 2rpx solid;
-	}
-	.contain{
-		
+		text{
+			font-weight: bold;
+			font-size: 34rpx;
+			margin-left: 40rpx;
+		}
+		image{
+			display:block;
+			width:48rpx;
+			height: 48rpx;
+			margin-right: 30rpx;
+		}
 	}
 	.search{
-		width: 95%;
-		height: 50px;
+		width: 90%;
+		height: 60rpx;
+		margin: 0 auto;
+		border-radius: 40rpx;
+		padding-left:20rpx;
+		background-color: #dedede;
+		font-size: 26rpx;
+	}
+	.searchview{
+		height: 120rpx;
+		display: flex;
+		align-items: center;
+	}
+	
+	.contain{
+		height:calc(100vh - 262rpx);
+		overflow-y: scroll;
+	}
+	.datalist{
+		width: 90%;
+		height: 100px;
 		border-top-left-radius: 10px;
 		border-top-right-radius: 10px;
+		background-color: #ffffff;
 		margin: 20px auto 0 auto;
 		display: flex;
 		justify-content: space-between;

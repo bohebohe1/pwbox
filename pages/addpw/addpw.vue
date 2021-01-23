@@ -1,12 +1,12 @@
 <template>
-	<view class="">
+	<view class="all">
 		<view class="status_bar">
 			<!-- 这里是状态栏 -->
 		</view>
 		<view class="addpsd">
-			<text style="margin-left: 20rpx;">新增密码</text>
+			<text>新增密码</text>
 		</view>
-		<view class="main">
+		<!-- <view class="main">
 			<input class="titleinput" type="text" placeholder="请输入标题" :value="title" @input="titlefn"/>
 			<input class="titleinput" type="text" placeholder="输入用户名" :value="username" @input="usernamefn" />
 			<input class="titleinput" type="text" placeholder="请输入密码" :value="password" @input="passwordfn" />
@@ -14,6 +14,28 @@
 			<view class="sumbitbtn" @click="submitbtn"> 
 				添加密码
 			</view>
+		</view> -->
+		<view class="editForm">
+			<select>
+			  <option value="volvo">Volvo</option>
+			  <option value="saab">Saab</option>
+			  <option value="opel">Opel</option>
+			  <option value="audi">Audi</option>
+			</select>
+		</view>
+		<view class="editForm">
+			<input class="titleinput" type="text" placeholder="请输入标题" :value="title" @input="titlefn"/>
+		</view>
+		<view class="editForm" style="height: 200rpx;">
+			<input class="titleinput" style="border-bottom:#D3D3D3 2rpx solid; ;" type="text" placeholder="输入用户名" :value="username" @input="usernamefn" />
+			<input class="titleinput" type="text" placeholder="请输入密码" :value="password" @input="passwordfn" />
+		</view>
+		
+		<view class="editForm" style="height: 200rpx;">
+			<textarea class="titleinput" cols="2" rows="6" style="overflow:hidden;height:200rpx;line-height: 100rpx;" placeholder="请输入备注" @input="ramarkfn" :value="ramark"></textarea>
+		</view>
+		<view class="sumbitbtn" @click="submitbtn">
+			添加密码
 		</view>
 	</view>
 </template>
@@ -79,36 +101,54 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
+	.all{
+		width: 100%;
+		height: 100vh;
+		background: #F8F8FA;
+		.editForm{
+			width: 90%;
+			height: 100rpx;
+			background: #ffffff;	
+			margin: 50rpx auto 0 auto;
+			border-radius: 30rpx;
+		}
+	}
 	.status_bar{
 		height: 40rpx;
 		width: 100%;
 	}
 	.addpsd{
 		width: 100%;
-		height: 40rpx;
+		height: 100rpx;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		border-bottom: #F1F1F1 2rpx solid;
+		text{
+			font-weight: bold;
+			font-size: 34rpx;
+			margin-left: 40rpx;
+		}
 	}
 	.main{
 		padding: 0 10rpx;
 	}
 	.titleinput{
-		width: 100%;
-		height: 80rpx;
-		line-height: 80rpx;
-		border-bottom: 	#D3D3D3 2rpx solid;
+		font-size: 26rpx;
+		width: 90%;
+		height: 100rpx;
+		margin: 0 auto;
+		// border-bottom: 	#D3D3D3 2rpx solid;
 	}
 	.sumbitbtn{
-		width: 100%;
+		width: 90%;
 		height: 80rpx;
 		background: #007AFF;
 		border-radius: 20rpx;
 		text-align: center;
 		color: white;
 		line-height: 80rpx;
-		margin-top: 20rpx;
+		margin: 40rpx auto 0 auto; 
 	}
 </style>
