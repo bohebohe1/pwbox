@@ -15,13 +15,14 @@
 				添加密码
 			</view>
 		</view> -->
-		<view class="editForm">
-			<select>
-			  <option value="volvo">Volvo</option>
-			  <option value="saab">Saab</option>
-			  <option value="opel">Opel</option>
-			  <option value="audi">Audi</option>
-			</select>
+		<view class="editForm" >
+			<view class="edittype">
+				<text class="typelabel">请选择类型</text>
+				<picker mode="selector" :value="type" :range-key="'Name'" :range="expressTemplate" @change="expressTemplateChange">
+					  <view>{{expressTemplate[type].Name}}</view>
+				</picker>
+			</view>
+				
 		</view>
 		<view class="editForm">
 			<input class="titleinput" type="text" placeholder="请输入标题" :value="title" @input="titlefn"/>
@@ -32,7 +33,7 @@
 		</view>
 		
 		<view class="editForm" style="height: 200rpx;">
-			<textarea class="titleinput" cols="2" rows="6" style="overflow:hidden;height:200rpx;line-height: 100rpx;" placeholder="请输入备注" @input="ramarkfn" :value="ramark"></textarea>
+			<textarea class="titleinput" cols="2" rows="6" style="overflow:hidden;height:200rpx;line-height: 50rpx;" placeholder="请输入备注" @input="ramarkfn" :value="ramark"></textarea>
 		</view>
 		<view class="sumbitbtn" @click="submitbtn">
 			添加密码
@@ -50,7 +51,11 @@
 				password: '',
 				ramark: '',
 				createdtime: '',
-				Storage_data: []
+				Storage_data: [],
+				Name: '',
+				expressTemplate: [{Name: '游戏'}, {Name: '工作'} , {Name: '其他'}],
+				type: 0,
+				
 			}
 		},
 		onShow (){
@@ -73,6 +78,11 @@
 			ramarkfn:function(e){
 				this.ramark = e.target.value;
 			},
+			// 密码类型改变
+			expressTemplateChange(e) {
+				this.type = e.detail.value
+				console.log(e.detail)
+			},
 			submitbtn() {
 				var time = new Date()
 				this.createdtime = time.getFullYear() + '年' + (time.getMonth() + 1) + '月' + time.getDate() + '日'
@@ -84,12 +94,14 @@
 					});
 					return
 				}
+				console.log(this.type)
 				// 存储数据
 				addUserInformation({
+					type: String(this.type),
 					id:this.title,
-					name: this.username,
-					gender: this.password,
-					avatar:this.ramark,
+					username: this.username,
+					password: this.password,
+					ramark:this.ramark,
 					createdtime: this.createdtime
 				}).then(res=>{
 					uni.navigateBack({
@@ -118,6 +130,23 @@
 		height: 40rpx;
 		width: 100%;
 	}
+	.edittype{
+		display: flex;
+		width: 90%;
+		height: 100rpx;
+		margin:0 auto;
+		align-items: center;
+		.typelabel{
+			color: #808080;
+			font-size: 26rpx;
+		}
+		picker{
+			width: 50%;
+			margin-left: 80rpx;
+			text-align: center;
+		}
+	}
+	
 	.addpsd{
 		width: 100%;
 		height: 100rpx;

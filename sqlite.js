@@ -31,12 +31,14 @@ function userInfoSQL(){
 		plus.sqlite.executeSql({
 			name:'pop',
 			//表格创建或者打开，后面为表格结构
-			sql:'create table if not exists userInfo("list" INTEGER PRIMARY KEY AUTOINCREMENT,"id" TEXT,"name" TEXT,"gender" TEXT,"avatar" TEXT,"createdtime" TEXT)', 
+			sql:'create table if not exists userInfo("list" INTEGER PRIMARY KEY AUTOINCREMENT,"type" TEXT,"id" TEXT,"username" TEXT,"password" TEXT,"ramark" TEXT,"createdtime" TEXT)', 
 			success(e){
 				resolve(e);
+				console.log(e,"创建表格")
 			},
 			fail(e){
 				reject(e);
+				console.log(e,"创建表格")
 			}
 		})
 	})
@@ -54,19 +56,22 @@ function addUserInformation(obj){
 		if(!b){
 			//obj传来的参数对象
 			var id = obj.id || null; //id
-			var name = obj.name || null; //名称
-			var gender = obj.gender || null; //性别
-			var avatar = obj.avatar || null; //头像
+			var type = obj.type || null; //类型
+			var username = obj.username || null; //名称
+			var password = obj.password || null; //密码
+			var ramark = obj.ramark || null; // 备注
 			var createdtime = obj.createdtime || null; // 创建时间
 			return new Promise((resolve,reject) =>{
 				plus.sqlite.executeSql({
 					name:'pop',
-					sql:'insert into userInfo(id,name,gender,avatar,createdtime) values("'+id+'","'+name+'","'+gender+'","'+avatar+'","'+createdtime+'")',
+					sql:'insert into userInfo(id,type,username,password,ramark,createdtime) values("'+id+'","'+type+'","'+username+'","'+password+'","'+ramark+'","'+createdtime+'")',
 					success(e){
 						resolve(e);
+						console.log(e, '添加数据')
 					},
 					fail(e){
 						reject(e);
+						console.log(e, '添加数据')
 					}
 				})
 			})
@@ -152,7 +157,7 @@ function modifyInformation(listName,name,cont,use,sel){
 	if(use == undefined){
 		sql ='update '+listName+' set '+name+'="'+cont+'"';
 	}else{
-		sql ='update '+listName+' set '+name.id+'="'+cont.id+'",'+name.name+'="'+cont.name+'",'+name.gender+'="'+cont.gender+'",'+name.avatar+'="'+cont.avatar+'",'+name.createdtime+'="'+cont.createdtime+'" where '+use+'="'+sel+'"';
+		sql ='update '+listName+' set '+name.id+'="'+cont.id+'",'+name.name+'="'+cont.name+'",'+name.type+'="'+cont.type+'",'+name.gender+'="'+cont.gender+'",'+name.avatar+'="'+cont.avatar+'",'+name.createdtime+'="'+cont.createdtime+'" where '+use+'="'+sel+'"';
 	}
 	//where前面的是要修改的，后面的是条件，选择哪个
 	return new Promise((resolve,reject) =>{

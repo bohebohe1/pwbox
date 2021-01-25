@@ -5,7 +5,7 @@
 		</view>
 		<view class="addpsd">
 			<text>密码盒</text>
-			<image src="/static/add.png" @click="addpassword" mode="" ></image>
+			<image src="/static/img/add.png" @click="addpassword" mode="" ></image>
 		</view>
 		<view class="searchview">
 			<input type="text" value="" placeholder="搜索账号密码" class="search"/>
@@ -30,9 +30,25 @@
 					{{item.createdtime}}
 				</view>
 			</view> -->
-			<view class="">
+				<!-- <van-button type="primary">弹出层</van-button> -->
 				
-			</view>
+					<van-swipe-cell  right-width="65">
+						<view class="swipe">
+							<view class="swipetop">
+								<view class="switopimg">
+									<image src="../../static/img/game.png" style="width: 100%;height: 100%;" mode=""></image>
+								</view>
+								<view class="">
+									<text>98273059</text><br/>
+									<text>98273059</text>
+								</view>
+							</view>
+							<view class="swipebottom">
+								
+							</view>
+						</view>
+						<view slot="right" class="delpw">删除</view>
+					</van-swipe-cell>
 		</view>
 	</view>
 </template>
@@ -66,6 +82,7 @@
 			},
 			init(){
 				selectInformationType('userInfo').then(res=>{
+					console.log(res)
 					this.storagedata = res
 				})
 			},
@@ -134,7 +151,37 @@
 		display: flex;
 		align-items: center;
 	}
-	
+	.swipe{
+		width: 90%;
+		height: 260rpx;
+		margin: 0 auto;
+		border-radius: 20rpx;
+		background: #fff;
+	}
+	.swipetop{
+		height: 170rpx;
+		display: flex;
+		align-items: center;
+		border-top-radius: 20rpx;
+		border-bottom: 1px #F1F1F1 solid;
+		.switopimg{
+			width: 120rpx;
+			height: 120rpx;
+		}
+	}
+	.swipebottom{
+		height: 68rpx;
+		border-bottom-radius: 20rpx;
+	}
+	.delpw{
+		width: 100rpx;
+		height: 260rpx;
+		border-radius: 20rpx;
+		color: #FFFFFF;
+		background: #DD524D;
+		text-align: center;
+		line-height: 260rpx;
+	}
 	.contain{
 		height:calc(100vh - 262rpx);
 		overflow-y: scroll;

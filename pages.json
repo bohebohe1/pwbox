@@ -42,5 +42,11 @@
 				"query": "" //启动参数，在页面的onLoad函数里面得到
 			}
 		]
+	},
+	"easycom":{
+		"autoscan": true ,// 是否自动扫描全局
+		"custom": {
+			"van-(.*)": "@/wxcomponents/vant/$1/index.vue"
+		}
 	}
 }

@@ -1,6 +1,6 @@
-(global["webpackJsonp"] = global["webpackJsonp"] || []).push([["common/vendor"],[
-/* 0 */,
-/* 1 */
+(global["webpackJsonp"] = global["webpackJsonp"] || []).push([["common/vendor"],{
+
+/***/ 1:
 /*!************************************************************!*\
   !*** ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js ***!
   \************************************************************/
@@ -904,7 +904,7 @@ function initData(vueOptions, context) {
     try {
       data = data.call(context); // 支持 Vue.prototype 上挂的数据
     } catch (e) {
-      if (Object({"NODE_ENV":"development","VUE_APP_NAME":"unidemo","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"VUE_APP_NAME":"密码盒","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.warn('根据 Vue 的 data 函数初始化小程序 data 失败，请尽量确保 data 函数中不访问 vm 对象，否则可能影响首次数据渲染速度。', data);
       }
     }
@@ -1805,7 +1805,373 @@ var uni$1 = uni;var _default =
 uni$1;exports.default = _default;
 
 /***/ }),
-/* 2 */
+
+/***/ 10:
+/*!**********************************************************************************************************!*\
+  !*** ./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib/runtime/componentNormalizer.js ***!
+  \**********************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return normalizeComponent; });
+/* globals __VUE_SSR_CONTEXT__ */
+
+// IMPORTANT: Do NOT use ES2015 features in this file (except for modules).
+// This module is a runtime utility for cleaner component module output and will
+// be included in the final webpack user bundle.
+
+function normalizeComponent (
+  scriptExports,
+  render,
+  staticRenderFns,
+  functionalTemplate,
+  injectStyles,
+  scopeId,
+  moduleIdentifier, /* server only */
+  shadowMode, /* vue-cli only */
+  components, // fixed by xxxxxx auto components
+  renderjs // fixed by xxxxxx renderjs
+) {
+  // Vue.extend constructor export interop
+  var options = typeof scriptExports === 'function'
+    ? scriptExports.options
+    : scriptExports
+
+  // fixed by xxxxxx auto components
+  if (components) {
+    if (!options.components) {
+      options.components = {}
+    }
+    var hasOwn = Object.prototype.hasOwnProperty
+    for (var name in components) {
+      if (hasOwn.call(components, name) && !hasOwn.call(options.components, name)) {
+        options.components[name] = components[name]
+      }
+    }
+  }
+  // fixed by xxxxxx renderjs
+  if (renderjs) {
+    (renderjs.beforeCreate || (renderjs.beforeCreate = [])).unshift(function() {
+      this[renderjs.__module] = this
+    });
+    (options.mixins || (options.mixins = [])).push(renderjs)
+  }
+
+  // render functions
+  if (render) {
+    options.render = render
+    options.staticRenderFns = staticRenderFns
+    options._compiled = true
+  }
+
+  // functional template
+  if (functionalTemplate) {
+    options.functional = true
+  }
+
+  // scopedId
+  if (scopeId) {
+    options._scopeId = 'data-v-' + scopeId
+  }
+
+  var hook
+  if (moduleIdentifier) { // server build
+    hook = function (context) {
+      // 2.3 injection
+      context =
+        context || // cached call
+        (this.$vnode && this.$vnode.ssrContext) || // stateful
+        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
+      // 2.2 with runInNewContext: true
+      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
+        context = __VUE_SSR_CONTEXT__
+      }
+      // inject component styles
+      if (injectStyles) {
+        injectStyles.call(this, context)
+      }
+      // register component module identifier for async chunk inferrence
+      if (context && context._registeredComponents) {
+        context._registeredComponents.add(moduleIdentifier)
+      }
+    }
+    // used by ssr in case component is cached and beforeCreate
+    // never gets called
+    options._ssrRegister = hook
+  } else if (injectStyles) {
+    hook = shadowMode
+      ? function () { injectStyles.call(this, this.$root.$options.shadowRoot) }
+      : injectStyles
+  }
+
+  if (hook) {
+    if (options.functional) {
+      // for template-only hot-reload because in that case the render fn doesn't
+      // go through the normalizer
+      options._injectStyles = hook
+      // register for functioal component in vue file
+      var originalRender = options.render
+      options.render = function renderWithStyleInjection (h, context) {
+        hook.call(context)
+        return originalRender(h, context)
+      }
+    } else {
+      // inject component registration as beforeCreate hook
+      var existing = options.beforeCreate
+      options.beforeCreate = existing
+        ? [].concat(existing, hook)
+        : [hook]
+    }
+  }
+
+  return {
+    exports: scriptExports,
+    options: options
+  }
+}
+
+
+/***/ }),
+
+/***/ 17:
+/*!*************************************!*\
+  !*** E:/Demo/pwbox/pwbox/sqlite.js ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.openSqlite = openSqlite;exports.userInfoSQL = userInfoSQL;exports.addUserInformation = addUserInformation;exports.selectInformationType = selectInformationType;exports.deleteInformationType = deleteInformationType;exports.pullSQL = pullSQL;exports.isOpen = isOpen;exports.closeSQL = closeSQL;exports.modifyInformation = modifyInformation; //我这个封装通过promise返回出去！！！
+//我这个封装通过promise返回出去！！！
+//创建数据库或者有该数据库就打开,    这一步必须要！
+function openSqlite() {
+  //创建数据库或者打开
+  //这plus.sqlite只在手机上运行
+  return new Promise(function (resolve, reject) {
+    plus.sqlite.openDatabase({
+      name: 'pop', //数据库名称
+      path: '_doc/pop.db', //数据库地址，uniapp推荐以下划线为开头，这到底存在哪里去了，我也不清楚，哈哈
+      success: function success(e) {
+        resolve(e); //成功回调
+      },
+      fail: function fail(e) {
+        reject(e); //失败回调
+      } });
+
+  });
+}
+//在该数据库里创建表格，   这一步也必须要！
+//下面注释里说的都是说sql:'create table if not exists....这里
+//userInfo是表格名，你也可以写其他的名，不能用数字作为表格名的开头！！！
+//括号里是表格的结构，列，这里我写了四列，list,id,gender,avatar这四列
+//list后面大写的英文是自动增加的意思，因为表格里的每一行必须有唯一标识
+//这sql语句会数据库的应该都看的懂，我是前端菜鸡，所以详细说明以便跟我一样不懂sql的前端看
+//"id" TEXT  意思是这一列放的值为字符串之类的，如果是想存数字之类的就改为INTEGER
+//数据库不能存对象，数组
+function userInfoSQL() {
+  return new Promise(function (resolve, reject) {
+    //创建表格在executeSql方法里写
+    plus.sqlite.executeSql({
+      name: 'pop',
+      //表格创建或者打开，后面为表格结构
+      sql: 'create table if not exists userInfo("list" INTEGER PRIMARY KEY AUTOINCREMENT,"type" TEXT,"id" TEXT,"username" TEXT,"password" TEXT,"ramark" TEXT,"createdtime" TEXT)',
+      success: function success(e) {
+        resolve(e);
+        console.log(e, "创建表格");
+      },
+      fail: function fail(e) {
+        reject(e);
+        console.log(e, "创建表格");
+      } });
+
+  });
+}
+
+//向表格里添加数据
+//根据表格的列来添加信息
+//因为list列我设为自动增加，所以不用添加数据
+//values里是传过来要存的值，我这里是动态的，单引号加双引号拼接
+function addUserInformation(obj) {
+  //判断有没有传参
+  if (obj !== undefined) {
+    //判断传的参是否有值
+    var b = JSON.stringify(obj) == "{}";
+    if (!b) {
+      //obj传来的参数对象
+      var id = obj.id || null; //id
+      var type = obj.type || null; //类型
+      var username = obj.username || null; //名称
+      var password = obj.password || null; //密码
+      var ramark = obj.ramark || null; // 备注
+      var createdtime = obj.createdtime || null; // 创建时间
+      return new Promise(function (resolve, reject) {
+        plus.sqlite.executeSql({
+          name: 'pop',
+          sql: 'insert into userInfo(id,type,username,password,ramark,createdtime) values("' + id + '","' + type + '","' + username + '","' + password + '","' + ramark + '","' + createdtime + '")',
+          success: function success(e) {
+            resolve(e);
+            console.log(e, '添加数据');
+          },
+          fail: function fail(e) {
+            reject(e);
+            console.log(e, '添加数据');
+          } });
+
+      });
+    } else {
+      return new Promise(function (resolve, reject) {reject("错误添加");});
+    }
+  } else {
+    return new Promise(function (resolve, reject) {reject("错误添加");});
+  }
+}
+
+//查询获取数据库里的数据
+//根据传过来的值来获取信息，我这里写了可以有两个条件来获取，都是动态的
+//第一个参数为表格名，aa,bb分别为列名和列的值 ， cc,dd同前面
+//传的参数按1,3,5来传，传一个，传三个，传五个参数，不能只传两个或者四个
+function selectInformationType(name, aa, bb, cc, dd) {
+  if (name !== undefined) {
+    //第一个是表单名称，后两个参数是列表名，用来检索
+    if (aa !== undefined && cc !== undefined) {
+      //两个检索条件
+      var sql = 'select * from ' + name + ' where ' + aa + '=' + bb + ' and ' + cc + '=' + dd + '';
+    }
+    if (aa !== undefined && cc == undefined) {
+      //一个检索条件
+      var sql = 'select * from ' + name + ' where ' + aa + '=' + bb + '';
+    }
+    if (aa == undefined) {
+      var sql = 'select * from ' + name + '';
+    }
+    return new Promise(function (resolve, reject) {
+      plus.sqlite.selectSql({
+        name: 'pop',
+        sql: sql,
+        success: function success(e) {
+          resolve(e);
+        },
+        fail: function fail(e) {
+          reject(e);
+        } });
+
+    });
+  } else {
+    return new Promise(function (resolve, reject) {reject("错误查询");});
+  }
+}
+
+//删除数据库里的数据
+//参数跟上面查询获取数据一样
+//传的参数按1,3,5来传，传一个，传三个，传五个参数，不能只传两个或者四个
+function deleteInformationType(name, sol, qq, ww, ee) {
+  if (name !== undefined && sol !== undefined) {
+    //listId为表名,后面两个是列表名，检索用的
+    if (ww !== undefined) {
+      //两个检索条件
+      var sql = 'delete from ' + name + ' where ' + sol + '="' + qq + '" and ' + ww + '=' + ee + '';
+    } else {
+      //一个检索条件
+      var sql = 'delete from ' + name + ' where ' + sol + '="' + qq + '"';
+    }
+    return new Promise(function (resolve, reject) {
+      plus.sqlite.executeSql({
+        name: 'pop',
+        sql: sql,
+        success: function success(e) {
+          resolve(e);
+        },
+        fail: function fail(e) {
+          reject(e);
+        } });
+
+    });
+  } else {
+    return new Promise(function (resolve, reject) {reject("错误删除");});
+  }
+}
+
+//修改数据表里的数据
+//第一个参数为表格名，name为要修改的列名，cont为要修改为什么值，use,sel为搜索条件，分别是列名和列值
+//传的参数按1,3,5来传，传一个，传三个，传五个参数，不能只传两个或者四个
+function modifyInformation(listName, name, cont, use, sel) {
+  //表格名，要修改地方的列名，修改后的内容，修改条件查询，列名，内容
+  var sql;
+  if (use == undefined) {
+    sql = 'update ' + listName + ' set ' + name + '="' + cont + '"';
+  } else {
+    sql = 'update ' + listName + ' set ' + name.id + '="' + cont.id + '",' + name.name + '="' + cont.name + '",' + name.type + '="' + cont.type + '",' + name.gender + '="' + cont.gender + '",' + name.avatar + '="' + cont.avatar + '",' + name.createdtime + '="' + cont.createdtime + '" where ' + use + '="' + sel + '"';
+  }
+  //where前面的是要修改的，后面的是条件，选择哪个
+  return new Promise(function (resolve, reject) {
+    plus.sqlite.executeSql({
+      name: 'pop',
+      sql: sql,
+      success: function success(e) {
+        resolve(e);
+      },
+      fail: function fail(e) {
+        reject(e);
+      } });
+
+  });
+}
+
+//关闭数据库
+function closeSQL(name) {
+  return new Promise(function (resolve, reject) {
+    plus.sqlite.closeDatabase({
+      name: 'pop',
+      success: function success(e) {
+        resolve(e);
+      },
+      fail: function fail(e) {
+        reject(e);
+      } });
+
+  });
+}
+
+//监听数据库是否开启
+function isOpen(name, path) {
+  var ss = name || 'pop';
+  var qq = path || '_doc/pop.db';
+  //数据库打开了就返回true,否则返回false
+  var open = plus.sqlite.isOpenDatabase({
+    name: ss,
+    path: qq });
+
+  return open;
+}
+
+//一次获取指定数据条数
+//不想一次性把数据全拿过来就可以这样写
+//id为表格名，desc代表倒序拿数据，正常是从第一条开始拿，倒序就从最后一条也是最新的一条数据开始拿
+//limit 15 offset '+num+''，后面这是两个单引号，这句的意思是跳过多少条拿15条数据，num是动态值
+//比如你刚开始给num设为0，那就从最后面的数据开始拿15条，你下次肯定不想再拿刚刚获取到的数据，所以可以让num为15，这样就能一步一步的拿完所有的数据
+function pullSQL(id, num) {
+  //id为表名，num为跳过多少条数据
+  //根据list来倒序拿数据，跳过num条拿取15条
+  return new Promise(function (resolve, reject) {
+    plus.sqlite.selectSql({
+      name: 'pop',
+      sql: 'select * from ' + id + ' order by list desc limit 15 offset ' + num + '',
+      success: function success(e) {
+        resolve(e);
+      },
+      fail: function fail(e) {
+        reject(e);
+      } });
+
+  });
+}
+//把这些方法导出去
+
+/***/ }),
+
+/***/ 2:
 /*!******************************************************************************************!*\
   !*** ./node_modules/@dcloudio/vue-cli-plugin-uni/packages/mp-vue/dist/mp.runtime.esm.js ***!
   \******************************************************************************************/
@@ -7331,7 +7697,7 @@ function type(obj) {
 
 function flushCallbacks$1(vm) {
     if (vm.__next_tick_callbacks && vm.__next_tick_callbacks.length) {
-        if (Object({"NODE_ENV":"development","VUE_APP_NAME":"unidemo","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
+        if (Object({"VUE_APP_NAME":"密码盒","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:flushCallbacks[' + vm.__next_tick_callbacks.length + ']');
@@ -7352,14 +7718,14 @@ function nextTick$1(vm, cb) {
     //1.nextTick 之前 已 setData 且 setData 还未回调完成
     //2.nextTick 之前存在 render watcher
     if (!vm.__next_tick_pending && !hasRenderWatcher(vm)) {
-        if(Object({"NODE_ENV":"development","VUE_APP_NAME":"unidemo","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"VUE_APP_NAME":"密码盒","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:nextVueTick');
         }
         return nextTick(cb, vm)
     }else{
-        if(Object({"NODE_ENV":"development","VUE_APP_NAME":"unidemo","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"VUE_APP_NAME":"密码盒","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance$1 = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance$1.is || mpInstance$1.route) + '][' + vm._uid +
                 ']:nextMPTick');
@@ -7445,7 +7811,7 @@ var patch = function(oldVnode, vnode) {
     });
     var diffData = this.$shouldDiffData === false ? data : diff(data, mpData);
     if (Object.keys(diffData).length) {
-      if (Object({"NODE_ENV":"development","VUE_APP_NAME":"unidemo","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"VUE_APP_NAME":"密码盒","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + this._uid +
           ']差量更新',
           JSON.stringify(diffData));
@@ -7851,7 +8217,8 @@ internalMixin(Vue);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../../webpack/buildin/global.js */ 3)))
 
 /***/ }),
-/* 3 */
+
+/***/ 3:
 /*!***********************************!*\
   !*** (webpack)/buildin/global.js ***!
   \***********************************/
@@ -7881,7 +8248,8 @@ module.exports = g;
 
 
 /***/ }),
-/* 4 */
+
+/***/ 4:
 /*!**************************************!*\
   !*** E:/Demo/pwbox/pwbox/pages.json ***!
   \**************************************/
@@ -7891,378 +8259,334 @@ module.exports = g;
 
 
 /***/ }),
-/* 5 */,
-/* 6 */,
-/* 7 */,
-/* 8 */,
-/* 9 */,
-/* 10 */
-/*!**********************************************************************************************************!*\
-  !*** ./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib/runtime/componentNormalizer.js ***!
-  \**********************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return normalizeComponent; });
-/* globals __VUE_SSR_CONTEXT__ */
-
-// IMPORTANT: Do NOT use ES2015 features in this file (except for modules).
-// This module is a runtime utility for cleaner component module output and will
-// be included in the final webpack user bundle.
-
-function normalizeComponent (
-  scriptExports,
-  render,
-  staticRenderFns,
-  functionalTemplate,
-  injectStyles,
-  scopeId,
-  moduleIdentifier, /* server only */
-  shadowMode, /* vue-cli only */
-  components, // fixed by xxxxxx auto components
-  renderjs // fixed by xxxxxx renderjs
-) {
-  // Vue.extend constructor export interop
-  var options = typeof scriptExports === 'function'
-    ? scriptExports.options
-    : scriptExports
-
-  // fixed by xxxxxx auto components
-  if (components) {
-    if (!options.components) {
-      options.components = {}
-    }
-    var hasOwn = Object.prototype.hasOwnProperty
-    for (var name in components) {
-      if (hasOwn.call(components, name) && !hasOwn.call(options.components, name)) {
-        options.components[name] = components[name]
-      }
-    }
-  }
-  // fixed by xxxxxx renderjs
-  if (renderjs) {
-    (renderjs.beforeCreate || (renderjs.beforeCreate = [])).unshift(function() {
-      this[renderjs.__module] = this
-    });
-    (options.mixins || (options.mixins = [])).push(renderjs)
-  }
-
-  // render functions
-  if (render) {
-    options.render = render
-    options.staticRenderFns = staticRenderFns
-    options._compiled = true
-  }
-
-  // functional template
-  if (functionalTemplate) {
-    options.functional = true
-  }
-
-  // scopedId
-  if (scopeId) {
-    options._scopeId = 'data-v-' + scopeId
-  }
-
-  var hook
-  if (moduleIdentifier) { // server build
-    hook = function (context) {
-      // 2.3 injection
-      context =
-        context || // cached call
-        (this.$vnode && this.$vnode.ssrContext) || // stateful
-        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
-      // 2.2 with runInNewContext: true
-      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
-        context = __VUE_SSR_CONTEXT__
-      }
-      // inject component styles
-      if (injectStyles) {
-        injectStyles.call(this, context)
-      }
-      // register component module identifier for async chunk inferrence
-      if (context && context._registeredComponents) {
-        context._registeredComponents.add(moduleIdentifier)
-      }
-    }
-    // used by ssr in case component is cached and beforeCreate
-    // never gets called
-    options._ssrRegister = hook
-  } else if (injectStyles) {
-    hook = shadowMode
-      ? function () { injectStyles.call(this, this.$root.$options.shadowRoot) }
-      : injectStyles
-  }
-
-  if (hook) {
-    if (options.functional) {
-      // for template-only hot-reload because in that case the render fn doesn't
-      // go through the normalizer
-      options._injectStyles = hook
-      // register for functioal component in vue file
-      var originalRender = options.render
-      options.render = function renderWithStyleInjection (h, context) {
-        hook.call(context)
-        return originalRender(h, context)
-      }
-    } else {
-      // inject component registration as beforeCreate hook
-      var existing = options.beforeCreate
-      options.beforeCreate = existing
-        ? [].concat(existing, hook)
-        : [hook]
-    }
-  }
-
-  return {
-    exports: scriptExports,
-    options: options
-  }
-}
-
-
-/***/ }),
-/* 11 */,
-/* 12 */,
-/* 13 */,
-/* 14 */,
-/* 15 */,
-/* 16 */,
-/* 17 */
-/*!*************************************!*\
-  !*** E:/Demo/pwbox/pwbox/sqlite.js ***!
-  \*************************************/
+/***/ 41:
+/*!*****************************************************************!*\
+  !*** E:/Demo/pwbox/pwbox/wxcomponents/vant/common/component.js ***!
+  \*****************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.openSqlite = openSqlite;exports.userInfoSQL = userInfoSQL;exports.addUserInformation = addUserInformation;exports.selectInformationType = selectInformationType;exports.deleteInformationType = deleteInformationType;exports.pullSQL = pullSQL;exports.isOpen = isOpen;exports.closeSQL = closeSQL;exports.modifyInformation = modifyInformation; //我这个封装通过promise返回出去！！！
-//我这个封装通过promise返回出去！！！
-//创建数据库或者有该数据库就打开,    这一步必须要！
-function openSqlite() {
-  //创建数据库或者打开
-  //这plus.sqlite只在手机上运行
-  return new Promise(function (resolve, reject) {
-    plus.sqlite.openDatabase({
-      name: 'pop', //数据库名称
-      path: '_doc/pop.db', //数据库地址，uniapp推荐以下划线为开头，这到底存在哪里去了，我也不清楚，哈哈
-      success: function success(e) {
-        console.log('成功');
-        resolve(e); //成功回调
-      },
-      fail: function fail(e) {
-        reject(e); //失败回调
-      } });
-
-  });
-}
-//在该数据库里创建表格，   这一步也必须要！
-//下面注释里说的都是说sql:'create table if not exists....这里
-//userInfo是表格名，你也可以写其他的名，不能用数字作为表格名的开头！！！
-//括号里是表格的结构，列，这里我写了四列，list,id,gender,avatar这四列
-//list后面大写的英文是自动增加的意思，因为表格里的每一行必须有唯一标识
-//这sql语句会数据库的应该都看的懂，我是前端菜鸡，所以详细说明以便跟我一样不懂sql的前端看
-//"id" TEXT  意思是这一列放的值为字符串之类的，如果是想存数字之类的就改为INTEGER
-//数据库不能存对象，数组
-function userInfoSQL() {
-  return new Promise(function (resolve, reject) {
-    //创建表格在executeSql方法里写
-    plus.sqlite.executeSql({
-      name: 'pop',
-      //表格创建或者打开，后面为表格结构
-      sql: 'create table if not exists userInfo("list" INTEGER PRIMARY KEY AUTOINCREMENT,"id" TEXT,"name" TEXT,"gender" TEXT,"avatar" TEXT,"createdtime" TEXT)',
-      success: function success(e) {
-        resolve(e);
-      },
-      fail: function fail(e) {
-        reject(e);
-      } });
-
-  });
-}
-
-//向表格里添加数据
-//根据表格的列来添加信息
-//因为list列我设为自动增加，所以不用添加数据
-//values里是传过来要存的值，我这里是动态的，单引号加双引号拼接
-function addUserInformation(obj) {
-  //判断有没有传参
-  if (obj !== undefined) {
-    //判断传的参是否有值
-    var b = JSON.stringify(obj) == "{}";
-    if (!b) {
-      //obj传来的参数对象
-      var id = obj.id || null; //id
-      var name = obj.name || null; //名称
-      var gender = obj.gender || null; //性别
-      var avatar = obj.avatar || null; //头像
-      var createdtime = obj.createdtime || null; // 创建时间
-      return new Promise(function (resolve, reject) {
-        plus.sqlite.executeSql({
-          name: 'pop',
-          sql: 'insert into userInfo(id,name,gender,avatar,createdtime) values("' + id + '","' + name + '","' + gender + '","' + avatar + '","' + createdtime + '")',
-          success: function success(e) {
-            resolve(e);
-            console.log(e, 'succ');
-          },
-          fail: function fail(e) {
-            reject(e);
-            console.log(e, 'fail');
-          } });
-
-      });
-    } else {
-      return new Promise(function (resolve, reject) {reject("错误添加");});
+Object.defineProperty(exports, "__esModule", { value: true });exports.VantComponent = VantComponent;var _basic = __webpack_require__(/*! ../mixins/basic */ 42);
+function mapKeys(source, target, map) {
+  Object.keys(map).forEach(function (key) {
+    if (source[key]) {
+      target[map[key]] = source[key];
     }
+  });
+}
+function VantComponent(vantOptions) {
+  var options = {};
+  mapKeys(vantOptions, options, {
+    data: 'data',
+    props: 'properties',
+    mixins: 'behaviors',
+    methods: 'methods',
+    beforeCreate: 'created',
+    created: 'attached',
+    mounted: 'ready',
+    destroyed: 'detached',
+    classes: 'externalClasses' });
+
+  // add default externalClasses
+  options.externalClasses = options.externalClasses || [];
+  options.externalClasses.push('custom-class');
+  // add default behaviors
+  options.behaviors = options.behaviors || [];
+  options.behaviors.push(_basic.basic);
+  // add relations
+  var relation = vantOptions.relation;
+  if (relation) {
+    options.relations = relation.relations;
+    options.behaviors.push(relation.mixin);
+  }
+  // map field to form-field behavior
+  if (vantOptions.field) {
+    options.behaviors.push('wx://form-field');
+  }
+  // add default options
+  options.options = {
+    multipleSlots: true,
+    addGlobalClass: true };
+
+  Component(options);
+}
+
+/***/ }),
+
+/***/ 42:
+/*!*************************************************************!*\
+  !*** E:/Demo/pwbox/pwbox/wxcomponents/vant/mixins/basic.js ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.basic = void 0;var basic = Behavior({
+  methods: {
+    $emit: function $emit(name, detail, options) {
+      this.triggerEvent(name, detail, options);
+    },
+    set: function set(data) {
+      this.setData(data);
+      return new Promise(function (resolve) {return wx.nextTick(resolve);});
+    } } });exports.basic = basic;
+
+/***/ }),
+
+/***/ 43:
+/*!**************************************************************!*\
+  !*** E:/Demo/pwbox/pwbox/wxcomponents/vant/mixins/button.js ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.button = void 0;var button = Behavior({
+  externalClasses: ['hover-class'],
+  properties: {
+    id: String,
+    lang: String,
+    businessId: Number,
+    sessionFrom: String,
+    sendMessageTitle: String,
+    sendMessagePath: String,
+    sendMessageImg: String,
+    showMessageCard: Boolean,
+    appParameter: String,
+    ariaLabel: String } });exports.button = button;
+
+/***/ }),
+
+/***/ 44:
+/*!*****************************************************************!*\
+  !*** E:/Demo/pwbox/pwbox/wxcomponents/vant/mixins/open-type.js ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.openType = void 0; // @ts-nocheck
+var openType = Behavior({
+  properties: {
+    openType: String },
+
+  methods: {
+    bindGetUserInfo: function bindGetUserInfo(event) {
+      this.$emit('getuserinfo', event.detail);
+    },
+    bindContact: function bindContact(event) {
+      this.$emit('contact', event.detail);
+    },
+    bindGetPhoneNumber: function bindGetPhoneNumber(event) {
+      this.$emit('getphonenumber', event.detail);
+    },
+    bindError: function bindError(event) {
+      this.$emit('error', event.detail);
+    },
+    bindLaunchApp: function bindLaunchApp(event) {
+      this.$emit('launchapp', event.detail);
+    },
+    bindOpenSetting: function bindOpenSetting(event) {
+      this.$emit('opensetting', event.detail);
+    } } });exports.openType = openType;
+
+/***/ }),
+
+/***/ 45:
+/*!***************************************************************!*\
+  !*** E:/Demo/pwbox/pwbox/wxcomponents/vant/common/version.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.canIUseModel = canIUseModel;exports.canIUseFormFieldButton = canIUseFormFieldButton;exports.canIUseAnimate = canIUseAnimate;exports.canIUseGroupSetData = canIUseGroupSetData;exports.canIUseNextTick = canIUseNextTick;var _utils = __webpack_require__(/*! ./utils */ 46);
+function compareVersion(v1, v2) {
+  v1 = v1.split('.');
+  v2 = v2.split('.');
+  var len = Math.max(v1.length, v2.length);
+  while (v1.length < len) {
+    v1.push('0');
+  }
+  while (v2.length < len) {
+    v2.push('0');
+  }
+  for (var i = 0; i < len; i++) {
+    var num1 = parseInt(v1[i], 10);
+    var num2 = parseInt(v2[i], 10);
+    if (num1 > num2) {
+      return 1;
+    }
+    if (num1 < num2) {
+      return -1;
+    }
+  }
+  return 0;
+}
+function canIUseModel() {
+  var system = (0, _utils.getSystemInfoSync)();
+  return compareVersion(system.SDKVersion, '2.9.3') >= 0;
+}
+function canIUseFormFieldButton() {
+  var system = (0, _utils.getSystemInfoSync)();
+  return compareVersion(system.SDKVersion, '2.10.3') >= 0;
+}
+function canIUseAnimate() {
+  var system = (0, _utils.getSystemInfoSync)();
+  return compareVersion(system.SDKVersion, '2.9.0') >= 0;
+}
+function canIUseGroupSetData() {
+  var system = (0, _utils.getSystemInfoSync)();
+  return compareVersion(system.SDKVersion, '2.4.0') >= 0;
+}
+function canIUseNextTick() {
+  return wx.canIUse('nextTick');
+}
+
+/***/ }),
+
+/***/ 46:
+/*!*************************************************************!*\
+  !*** E:/Demo/pwbox/pwbox/wxcomponents/vant/common/utils.js ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.range = range;exports.nextTick = nextTick;exports.getSystemInfoSync = getSystemInfoSync;exports.addUnit = addUnit;exports.requestAnimationFrame = requestAnimationFrame;exports.pickExclude = pickExclude;exports.getRect = getRect;exports.getAllRect = getAllRect;exports.groupSetData = groupSetData;exports.toPromise = toPromise;exports.getCurrentPage = getCurrentPage;var _validator = __webpack_require__(/*! ./validator */ 47);
+var _version = __webpack_require__(/*! ./version */ 45);
+function range(num, min, max) {
+  return Math.min(Math.max(num, min), max);
+}
+function nextTick(cb) {
+  if ((0, _version.canIUseNextTick)()) {
+    wx.nextTick(cb);
   } else {
-    return new Promise(function (resolve, reject) {reject("错误添加");});
+    setTimeout(function () {
+      cb();
+    }, 1000 / 30);
   }
 }
-
-//查询获取数据库里的数据
-//根据传过来的值来获取信息，我这里写了可以有两个条件来获取，都是动态的
-//第一个参数为表格名，aa,bb分别为列名和列的值 ， cc,dd同前面
-//传的参数按1,3,5来传，传一个，传三个，传五个参数，不能只传两个或者四个
-function selectInformationType(name, aa, bb, cc, dd) {
-  if (name !== undefined) {
-    console.log('成功');
-    //第一个是表单名称，后两个参数是列表名，用来检索
-    if (aa !== undefined && cc !== undefined) {
-      //两个检索条件
-      var sql = 'select * from ' + name + ' where ' + aa + '=' + bb + ' and ' + cc + '=' + dd + '';
-    }
-    if (aa !== undefined && cc == undefined) {
-      //一个检索条件
-      var sql = 'select * from ' + name + ' where ' + aa + '=' + bb + '';
-    }
-    if (aa == undefined) {
-      var sql = 'select * from ' + name + '';
-    }
-    return new Promise(function (resolve, reject) {
-      plus.sqlite.selectSql({
-        name: 'pop',
-        sql: sql,
-        success: function success(e) {
-          resolve(e);
-        },
-        fail: function fail(e) {
-          reject(e);
-        } });
-
-    });
-  } else {
-    return new Promise(function (resolve, reject) {reject("错误查询");});
+var systemInfo;
+function getSystemInfoSync() {
+  if (systemInfo == null) {
+    systemInfo = wx.getSystemInfoSync();
   }
+  return systemInfo;
 }
-
-//删除数据库里的数据
-//参数跟上面查询获取数据一样
-//传的参数按1,3,5来传，传一个，传三个，传五个参数，不能只传两个或者四个
-function deleteInformationType(name, sol, qq, ww, ee) {
-  if (name !== undefined && sol !== undefined) {
-    //listId为表名,后面两个是列表名，检索用的
-    if (ww !== undefined) {
-      //两个检索条件
-      var sql = 'delete from ' + name + ' where ' + sol + '="' + qq + '" and ' + ww + '=' + ee + '';
-    } else {
-      //一个检索条件
-      var sql = 'delete from ' + name + ' where ' + sol + '="' + qq + '"';
-    }
-    return new Promise(function (resolve, reject) {
-      plus.sqlite.executeSql({
-        name: 'pop',
-        sql: sql,
-        success: function success(e) {
-          resolve(e);
-        },
-        fail: function fail(e) {
-          reject(e);
-        } });
-
-    });
-  } else {
-    return new Promise(function (resolve, reject) {reject("错误删除");});
+function addUnit(value) {
+  if (!(0, _validator.isDef)(value)) {
+    return undefined;
   }
+  value = String(value);
+  return (0, _validator.isNumber)(value) ? "".concat(value, "px") : value;
 }
-
-//修改数据表里的数据
-//第一个参数为表格名，name为要修改的列名，cont为要修改为什么值，use,sel为搜索条件，分别是列名和列值
-//传的参数按1,3,5来传，传一个，传三个，传五个参数，不能只传两个或者四个
-function modifyInformation(listName, name, cont, use, sel) {
-  //表格名，要修改地方的列名，修改后的内容，修改条件查询，列名，内容
-  var sql;
-  if (use == undefined) {
-    sql = 'update ' + listName + ' set ' + name + '="' + cont + '"';
-  } else {
-    sql = 'update ' + listName + ' set ' + name + '="' + cont + '" where ' + use + '="' + sel + '"';
+function requestAnimationFrame(cb) {
+  var systemInfo = getSystemInfoSync();
+  if (systemInfo.platform === 'devtools') {
+    return setTimeout(function () {
+      cb();
+    }, 1000 / 30);
   }
-  //where前面的是要修改的，后面的是条件，选择哪个
-  return new Promise(function (resolve, reject) {
-    plus.sqlite.executeSql({
-      name: 'pop',
-      sql: sql,
-      success: function success(e) {
-        resolve(e);
-      },
-      fail: function fail(e) {
-        reject(e);
-      } });
-
+  return wx.
+  createSelectorQuery().
+  selectViewport().
+  boundingClientRect().
+  exec(function () {
+    cb();
   });
 }
-
-//关闭数据库
-function closeSQL(name) {
-  return new Promise(function (resolve, reject) {
-    plus.sqlite.closeDatabase({
-      name: 'pop',
-      success: function success(e) {
-        resolve(e);
-      },
-      fail: function fail(e) {
-        reject(e);
-      } });
-
+function pickExclude(obj, keys) {
+  if (!(0, _validator.isPlainObject)(obj)) {
+    return {};
+  }
+  return Object.keys(obj).reduce(function (prev, key) {
+    if (!keys.includes(key)) {
+      prev[key] = obj[key];
+    }
+    return prev;
+  }, {});
+}
+function getRect(context, selector) {
+  return new Promise(function (resolve) {
+    wx.createSelectorQuery().
+    in(context).
+    select(selector).
+    boundingClientRect().
+    exec(function () {var rect = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];return resolve(rect[0]);});
   });
 }
-
-//监听数据库是否开启
-function isOpen(name, path) {
-  var ss = name || 'pop';
-  var qq = path || '_doc/pop.db';
-  //数据库打开了就返回true,否则返回false
-  var open = plus.sqlite.isOpenDatabase({
-    name: ss,
-    path: qq });
-
-  return open;
-}
-
-//一次获取指定数据条数
-//不想一次性把数据全拿过来就可以这样写
-//id为表格名，desc代表倒序拿数据，正常是从第一条开始拿，倒序就从最后一条也是最新的一条数据开始拿
-//limit 15 offset '+num+''，后面这是两个单引号，这句的意思是跳过多少条拿15条数据，num是动态值
-//比如你刚开始给num设为0，那就从最后面的数据开始拿15条，你下次肯定不想再拿刚刚获取到的数据，所以可以让num为15，这样就能一步一步的拿完所有的数据
-function pullSQL(id, num) {
-  //id为表名，num为跳过多少条数据
-  //根据list来倒序拿数据，跳过num条拿取15条
-  return new Promise(function (resolve, reject) {
-    plus.sqlite.selectSql({
-      name: 'pop',
-      sql: 'select * from ' + id + ' order by list desc limit 15 offset ' + num + '',
-      success: function success(e) {
-        resolve(e);
-      },
-      fail: function fail(e) {
-        reject(e);
-      } });
-
+function getAllRect(context, selector) {
+  return new Promise(function (resolve) {
+    wx.createSelectorQuery().
+    in(context).
+    selectAll(selector).
+    boundingClientRect().
+    exec(function () {var rect = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];return resolve(rect[0]);});
   });
 }
-//把这些方法导出去
+function groupSetData(context, cb) {
+  if ((0, _version.canIUseGroupSetData)()) {
+    context.groupSetData(cb);
+  } else {
+    cb();
+  }
+}
+function toPromise(promiseLike) {
+  if ((0, _validator.isPromise)(promiseLike)) {
+    return promiseLike;
+  }
+  return Promise.resolve(promiseLike);
+}
+function getCurrentPage() {
+  var pages = getCurrentPages();
+  return pages[pages.length - 1];
+}
+
+/***/ }),
+
+/***/ 47:
+/*!*****************************************************************!*\
+  !*** E:/Demo/pwbox/pwbox/wxcomponents/vant/common/validator.js ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.isFunction = isFunction;exports.isPlainObject = isPlainObject;exports.isPromise = isPromise;exports.isDef = isDef;exports.isObj = isObj;exports.isNumber = isNumber;exports.isBoolean = isBoolean;exports.isImageUrl = isImageUrl;exports.isVideoUrl = isVideoUrl;function isFunction(val) {
+  return typeof val === 'function';
+}
+function isPlainObject(val) {
+  return val !== null && typeof val === 'object' && !Array.isArray(val);
+}
+function isPromise(val) {
+  return isPlainObject(val) && isFunction(val.then) && isFunction(val.catch);
+}
+function isDef(value) {
+  return value !== undefined && value !== null;
+}
+function isObj(x) {
+  var type = typeof x;
+  return x !== null && (type === 'object' || type === 'function');
+}
+function isNumber(value) {
+  return /^\d+(\.\d+)?$/.test(value);
+}
+function isBoolean(value) {
+  return typeof value === 'boolean';
+}
+var IMAGE_REGEXP = /\.(jpeg|jpg|gif|png|svg|webp|jfif|bmp|dpg)/i;
+var VIDEO_REGEXP = /\.(mp4|mpg|mpeg|dat|asf|avi|rm|rmvb|mov|wmv|flv|mkv)/i;
+function isImageUrl(url) {
+  return IMAGE_REGEXP.test(url);
+}
+function isVideoUrl(url) {
+  return VIDEO_REGEXP.test(url);
+}
 
 /***/ })
-]]);
+
+}]);
 //# sourceMappingURL=../../.sourcemap/mp-weixin/common/vendor.js.map
