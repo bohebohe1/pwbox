@@ -34,9 +34,9 @@
 				// 获取指定密码
 				selectInformationType('userInfo','list',this.id).then(res=>{
 					this.title = res[0].id	
-					this.username= res[0].name
-					this.password= res[0].gender
-					this.ramark= res[0].avatar
+					this.username= res[0].username
+					this.password= res[0].password
+					this.ramark= res[0].ramark
 				})
 			},
 			titlefn:function(e){

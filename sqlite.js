@@ -157,7 +157,7 @@ function modifyInformation(listName,name,cont,use,sel){
 	if(use == undefined){
 		sql ='update '+listName+' set '+name+'="'+cont+'"';
 	}else{
-		sql ='update '+listName+' set '+name.id+'="'+cont.id+'",'+name.name+'="'+cont.name+'",'+name.type+'="'+cont.type+'",'+name.gender+'="'+cont.gender+'",'+name.avatar+'="'+cont.avatar+'",'+name.createdtime+'="'+cont.createdtime+'" where '+use+'="'+sel+'"';
+		sql ='update '+listName+' set '+name.id+'="'+cont.id+'",'+name.username+'="'+cont.username+'",'+name.type+'="'+cont.type+'",'+name.password+'="'+cont.password+'",'+name.ramark+'="'+cont.ramark+'",'+name.createdtime+'="'+cont.createdtime+'" where '+use+'="'+sel+'"';
 	}
 	//where前面的是要修改的，后面的是条件，选择哪个
 	return new Promise((resolve,reject) =>{
@@ -169,6 +169,7 @@ function modifyInformation(listName,name,cont,use,sel){
 			},
 			fail(e){
 				reject(e);
+				console.log(e)
 			}
 		})
 	})

@@ -8,7 +8,7 @@
 			<image src="/static/img/add.png" @click="addpassword" mode="" ></image>
 		</view>
 		<view class="searchview">
-			<input type="text" value="" placeholder="搜索账号密码" class="search"/>
+			<input type="text" value="" placeholder="搜索账号密码" class="search" @input="seach"/>
 		</view>
 		<view class="contain">
 			<!-- <view v-for="item in storagedata" class="datalist" :style="{backgroundColor: bg()}" @click="editpw(item.list)"> -->
@@ -32,30 +32,79 @@
 			</view> -->
 				<!-- <van-button type="primary">弹出层</van-button> -->
 				
-					<van-swipe-cell  right-width="65">
+				<!-- 	<van-swipe-cell v-for="item in storagedata" @click="editpw(item.list)" right-width="130">
 						<view class="swipe">
 							<view class="swipetop">
 								<view class="switopimg">
 									<image src="../../static/img/game.png" style="width: 100%;height: 100%;" mode=""></image>
 								</view>
-								<view class="">
-									<text>98273059</text><br/>
-									<text>98273059</text>
+								<view class="swimessage">
+									<text>学习</text><br/>
+									<text>{{item.id}}</text>
+								</view>
+								<view class="creattime">
+									{{item.createdtime}}
 								</view>
 							</view>
 							<view class="swipebottom">
-								
+								备注：{{item.ramark}}
 							</view>
 						</view>
 						<view slot="right" class="delpw">删除</view>
+					</van-swipe-cell> -->
+					
+				<view class="" v-for="item in storagedata" style="margin-top: 40rpx;">
+					<van-swipe-cell right-width="130">
+						<view class="swipe">
+							<view class="swipetop">
+								<view class="switopimg">
+									<image :src="item.type | imageurl " style="width: 100%;height: 100%;border-radius: 20rpx;" mode=""></image>
+								</view>
+								<view class="swimessage">
+									<text>{{item.type | typetext}}</text><br/>
+									<text>{{item.id}}</text>
+								</view>
+								<view class="creattime">
+									{{item.createdtime}}
+								</view>
+							</view>
+							<view class="swipebottom">
+								备注：{{item.ramark}}
+							</view>
+						</view>
+							<view slot="right" style="display: flex;">
+								<view class="delpw" style="background-color: #7363DD;" @click="editpw(item.list)">修改</view>
+								<view class="delpw" style="margin-left: 20rpx;" @click="delpw(item.list)">删除</view>
+							</view>
 					</van-swipe-cell>
+				</view>
 		</view>
 	</view>
 </template>
 
 <script>
-	import {openSqlite,userInfoSQL,selectInformationType} from '../../sqlite.js'
-	export default {
+	import {openSqlite,userInfoSQL,selectInformationType,deleteInformationType} from '../../sqlite.js'
+	export default {	
+		filters:{
+			imageurl(val){
+				if(val == '0'){
+					return '/static/img/game1.png'
+				}else if(val == '1'){
+					return '/static/img/study.png'
+				}else {
+					return '/static/img/app.png'
+				}
+			},
+			typetext(val) {
+				if(val == '0'){
+					return '游戏'
+				}else if(val == '1'){
+					return '工作'
+				}else {
+					return '其他'
+				}
+			}
+		},
 		data() {
 			return {
 				title: 'Hello',
@@ -63,6 +112,7 @@
 				storagedata: [],
 				boole: false,
 				bgdata: ['#4CD964','#007AFF','#9932CC','#F0E68C','#D2691E','#000000'],
+				imagetype: ''
 			}
 		},
 		onLoad() {
@@ -78,13 +128,25 @@
 				}),
 				userInfoSQL().then(res=>{
 				})
-				
 			},
 			init(){
 				selectInformationType('userInfo').then(res=>{
 					console.log(res)
 					this.storagedata = res
 				})
+			},
+			// 搜索账号
+			seach:function (e){
+				if(e.target.value){
+					selectInformationType('userInfo','username',e.target.value).then(res=>{
+						console.log(res)
+						this.storagedata = res
+					})
+				}else {
+					console.log('kong')
+					this.init()
+				}
+				
 			},
 			// 添加背景颜色
 			bg() {
@@ -94,16 +156,24 @@
 			addpassword() {
 				uni.navigateTo({
 					url: '/pages/addpw/addpw',
-					animationType: 'zoom-fade-out',
-					animationDuration: 1000
+					animationType: 'zoom-fade-out', 
+					animationDuration: 100
 				});
 			},
 			// 修改密码
 			editpw(e) {
+				console.log('edit')
 				uni.navigateTo({
-					url: '/pages/editpw/editpw?id='+e,
+					url: '/pages/addpw/addpw?id='+e,
 				});
 			},
+			// 删除密码
+			delpw(e){
+				console.log('删除')
+				deleteInformationType('userInfo','list',e).then(res=>{
+					this.init()
+				})
+			}
 		}
 	}
 </script>
@@ -113,6 +183,7 @@
 		width: 100%;
 		height: 100vh;
 		background: #F8F8FA;
+		font-family: PingFangSC-Regular;
 	}
 	.status_bar{
 		height: 40rpx;
@@ -137,19 +208,20 @@
 			margin-right: 30rpx;
 		}
 	}
-	.search{
-		width: 90%;
-		height: 60rpx;
-		margin: 0 auto;
-		border-radius: 40rpx;
-		padding-left:20rpx;
-		background-color: #dedede;
-		font-size: 26rpx;
-	}
+	
 	.searchview{
-		height: 120rpx;
+		height: 80rpx;
 		display: flex;
 		align-items: center;
+		.search{
+			width: 90%;
+			height: 60rpx;
+			margin: 0 auto;
+			border-radius: 40rpx;
+			padding-left:20rpx;
+			background-color: #F1F1F1;
+			font-size: 26rpx;
+		}
 	}
 	.swipe{
 		width: 90%;
@@ -162,16 +234,36 @@
 		height: 170rpx;
 		display: flex;
 		align-items: center;
+		justify-content: space-around;
 		border-top-radius: 20rpx;
 		border-bottom: 1px #F1F1F1 solid;
 		.switopimg{
-			width: 120rpx;
-			height: 120rpx;
+			width: 100rpx;
+			height: 100rpx;
+		}
+		.swimessage{
+			// margin-right: auto;
+			text:first-child{
+				font-weight: bold;
+				font-size: 28rpx;
+			}
+			text:last-child{
+				color: #C6CAC9;
+			}
+		}
+		.creattime{
+			font-size: 24rpx;
+			color: #C6CAC9;
 		}
 	}
 	.swipebottom{
 		height: 68rpx;
 		border-bottom-radius: 20rpx;
+		display: flex;
+		align-items: center;
+		margin-left: 60rpx;
+		font-size: 28rpx;
+		color: #c6cac9;
 	}
 	.delpw{
 		width: 100rpx;

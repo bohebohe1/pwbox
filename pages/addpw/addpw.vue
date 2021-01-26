@@ -6,15 +6,6 @@
 		<view class="addpsd">
 			<text>新增密码</text>
 		</view>
-		<!-- <view class="main">
-			<input class="titleinput" type="text" placeholder="请输入标题" :value="title" @input="titlefn"/>
-			<input class="titleinput" type="text" placeholder="输入用户名" :value="username" @input="usernamefn" />
-			<input class="titleinput" type="text" placeholder="请输入密码" :value="password" @input="passwordfn" />
-			<textarea class="titleinput" cols="2" rows="6" style="overflow:hidden;height:300rpx;" placeholder="请输入备注" @input="ramarkfn" :value="ramark"></textarea>
-			<view class="sumbitbtn" @click="submitbtn"> 
-				添加密码
-			</view>
-		</view> -->
 		<view class="editForm" >
 			<view class="edittype">
 				<text class="typelabel">请选择类型</text>
@@ -28,7 +19,7 @@
 			<input class="titleinput" type="text" placeholder="请输入标题" :value="title" @input="titlefn"/>
 		</view>
 		<view class="editForm" style="height: 200rpx;">
-			<input class="titleinput" style="border-bottom:#D3D3D3 2rpx solid; ;" type="text" placeholder="输入用户名" :value="username" @input="usernamefn" />
+			<input class="titleinput" style="border-bottom:#D3D3D3 2rpx solid; ;" type="text" placeholder="输入账号" :value="username" @input="usernamefn" />
 			<input class="titleinput" type="text" placeholder="请输入密码" :value="password" @input="passwordfn" />
 		</view>
 		
@@ -36,13 +27,13 @@
 			<textarea class="titleinput" cols="2" rows="6" style="overflow:hidden;height:200rpx;line-height: 50rpx;" placeholder="请输入备注" @input="ramarkfn" :value="ramark"></textarea>
 		</view>
 		<view class="sumbitbtn" @click="submitbtn">
-			添加密码
+			{{btntext}}
 		</view>
 	</view>
 </template>
 
 <script>
-	import {openSqlite,userInfoSQL,addUserInformation} from '../../sqlite.js'
+	import {openSqlite,userInfoSQL,addUserInformation,selectInformationType,modifyInformation} from '../../sqlite.js'
 	export default {
 		data() {
 			return {
@@ -55,9 +46,21 @@
 				Name: '',
 				expressTemplate: [{Name: '游戏'}, {Name: '工作'} , {Name: '其他'}],
 				type: 0,
+				id: '',
+				btntext: ''
 				
 			}
 		},
+		onLoad: function (option) { //option为object类型，会序列化上个页面传递的参数
+				//打印出上个页面传递的参数。
+				if(option.id) {
+					this.id = option.id
+					this.btntext = '修改密码'
+					this.getpw()
+				}else {
+					this.btntext = '添加密码'
+				}
+		    },
 		onShow (){
 			this.init()
 		},
@@ -65,6 +68,16 @@
 			init() {
 				openSqlite().then(res=>{}),
 				userInfoSQL().then(res=>{})
+			},
+			getpw(){
+				// 获取指定密码
+				selectInformationType('userInfo','list',this.id).then(res=>{
+					this.title = res[0].id	
+					this.username= res[0].username
+					this.password= res[0].password
+					this.ramark= res[0].ramark
+					this.type = res[0].type
+				})
 			},
 			titlefn:function(e){
 				this.title = e.target.value;
@@ -95,19 +108,53 @@
 					return
 				}
 				console.log(this.type)
-				// 存储数据
-				addUserInformation({
-					type: String(this.type),
-					id:this.title,
-					username: this.username,
-					password: this.password,
-					ramark:this.ramark,
-					createdtime: this.createdtime
-				}).then(res=>{
-					uni.navigateBack({
-						delta:1
-					});
-				})				
+				console.log(this.id,'thisid')
+				if(this.id){
+					// 修改
+					modifyInformation('userInfo',
+					{	
+						id:'id',
+						username:'username',
+						type: 'type',
+						password:'password',
+						ramark:'ramark',
+						createdtime:'createdtime',
+					},
+					{
+						type: String(this.type),
+						id:this.title,
+						username: this.username,
+						password: this.password,
+						ramark:this.ramark,
+						createdtime: this.createdtime
+					},
+					'list',
+					this.id
+						).then(res=>{
+							console.log("修改")
+						uni.navigateBack({
+							delta:1
+						});
+					})
+				}else{
+					// 存储数据
+					addUserInformation({
+						type: String(this.type),
+						id:this.title,
+						username: this.username,
+						password: this.password,
+						ramark:this.ramark,
+						createdtime: this.createdtime
+					}).then(res=>{
+						console.log("新增")
+						uni.navigateBack({
+							delta:1
+						});
+					})	
+				}
+				
+				
+							
 			}
 		}
 	}
