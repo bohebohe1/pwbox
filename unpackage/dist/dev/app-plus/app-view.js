@@ -253,7 +253,7 @@ var render = function() {
             attrs: {
               type: "text",
               value: _vm._$g(6, "a-value"),
-              placeholder: "搜索账号密码",
+              placeholder: "搜索账号",
               _i: 6
             },
             on: {

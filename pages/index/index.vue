@@ -8,7 +8,7 @@
 			<image src="/static/img/add.png" @click="addpassword" mode="" ></image>
 		</view>
 		<view class="searchview">
-			<input type="text" :value="value" placeholder="搜索账号密码" class="search" @input="seach"/>
+			<input type="text" :value="value" placeholder="搜索账号" class="search" @input="seach"/>
 		</view>
 		<view class="contain">
 		<!-- 测试数据 -->
