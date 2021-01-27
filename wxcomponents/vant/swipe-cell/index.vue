@@ -1,5 +1,5 @@
 <template>
-<uni-shadow-root class="vant-swipe-cell-index"><view class="van-swipe-cell custom-class" data-key="cell" @click.stop.prevent="onClick" @touchstart="startDrag" @touchmove.stop.prevent="_$self[(catchMove ? 'noop' : '')||'_$noop']($event)" @touchmove.capture="onDrag" @touchend="endDrag" @touchcancel="endDrag">
+<uni-shadow-root class="vant-swipe-cell-index"><view class="van-swipe-cell custom-class" data-key="cell" @click.stop.prevent="onClick" @touchstart="startDrag" @touchmove.capture="onDrag" @touchend="endDrag" @touchcancel="endDrag">
   <view :style="wrapperStyle">
     <view v-if="leftWidth" class="van-swipe-cell__left" data-key="left" @click.stop.prevent="onClick">
       <slot name="left"></slot>
@@ -20,6 +20,7 @@ import { touch } from '../mixins/touch';
 import { range } from '../common/utils';
 const THRESHOLD = 0.3;
 let ARRAY = [];
+// let timer = null
 VantComponent({
   props: {
     disabled: Boolean,
@@ -32,9 +33,9 @@ VantComponent({
         }
       },
     },
-    rightWidth: {
+    rightWidth: { 
       type: Number,
-      value: 0,
+      value: 0, 
       observer(rightWidth = 0) {
         if (this.offset < 0) {
           this.swipeMove(-rightWidth);
@@ -113,8 +114,14 @@ VantComponent({
       }
       this.touchMove(event);
       if (this.direction !== 'horizontal') {
+		  this.setData({catchMove: false})
+		  // clearTimeout(timer)
+		  // timer = setTimeout(() => {
+			 //  this.setData({catchMove: true})
+		  // }, 1000)
         return;
       }
+	  this.setData({catchMove: true})
       this.dragging = true;
       ARRAY.filter(
         (item) => item !== this && item.offset !== 0

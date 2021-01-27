@@ -96,7 +96,7 @@ function selectInformationType(name,aa,bb,cc,dd){
 		}
 		if(aa !== undefined && cc == undefined){
 			//一个检索条件
-			var sql = 'select * from '+name+' where '+aa+'='+bb+'';
+			var sql = 'select * from '+name+' where '+aa+' like '+"'%"+bb+"%'";
 		}
 		if(aa == undefined){
 			var sql = 'select * from '+name+'';

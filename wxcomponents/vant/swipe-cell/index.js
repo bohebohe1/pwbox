@@ -3,6 +3,7 @@ import { touch } from '../mixins/touch';
 import { range } from '../common/utils';
 const THRESHOLD = 0.3;
 let ARRAY = [];
+// let timer = null
 VantComponent({
   props: {
     disabled: Boolean,
@@ -15,9 +16,9 @@ VantComponent({
         }
       },
     },
-    rightWidth: {
+    rightWidth: { 
       type: Number,
-      value: 0,
+      value: 0, 
       observer(rightWidth = 0) {
         if (this.offset < 0) {
           this.swipeMove(-rightWidth);
@@ -96,8 +97,14 @@ VantComponent({
       }
       this.touchMove(event);
       if (this.direction !== 'horizontal') {
+		  this.setData({catchMove: false})
+		  // clearTimeout(timer)
+		  // timer = setTimeout(() => {
+			 //  this.setData({catchMove: true})
+		  // }, 1000)
         return;
       }
+	  this.setData({catchMove: true})
       this.dragging = true;
       ARRAY.filter(
         (item) => item !== this && item.offset !== 0

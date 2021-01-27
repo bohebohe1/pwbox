@@ -252,7 +252,7 @@ var render = function() {
             staticClass: _vm._$g(6, "sc"),
             attrs: {
               type: "text",
-              value: "",
+              value: _vm._$g(6, "a-value"),
               placeholder: "搜索账号密码",
               _i: 6
             },
@@ -509,9 +509,6 @@ var render = function() {
             },
             touchstart: function($event) {
               return _vm.$handleViewEvent($event)
-            },
-            touchmove: function($event) {
-              return _vm.$handleViewEvent($event, { stop: true, prevent: true })
             },
             "!touchmove": function($event) {
               return _vm.$handleViewEvent($event, { capture: true })

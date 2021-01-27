@@ -8,31 +8,12 @@
 			<image src="/static/img/add.png" @click="addpassword" mode="" ></image>
 		</view>
 		<view class="searchview">
-			<input type="text" value="" placeholder="搜索账号密码" class="search" @input="seach"/>
+			<input type="text" :value="value" placeholder="搜索账号密码" class="search" @input="seach"/>
 		</view>
 		<view class="contain">
-			<!-- <view v-for="item in storagedata" class="datalist" :style="{backgroundColor: bg()}" @click="editpw(item.list)"> -->
-			<!-- <view v-for="item in storagedata" class="datalist" @click="editpw(item.list)">
-				<view class="headview">
-					<view class="first">
-						{{item.id}}
-					</view>
-					<view class="mainmsg">
-						<view class="">
-							{{item.id}}
-						</view>
-						<view class="username">
-							{{item.name}}
-						</view>
-					</view>
-				</view>
-				<view class="" style="margin-right: 20px;font-size: 12px;">
-					{{item.createdtime}}
-				</view>
-			</view> -->
-				<!-- <van-button type="primary">弹出层</van-button> -->
-				
-				<!-- 	<van-swipe-cell v-for="item in storagedata" @click="editpw(item.list)" right-width="130">
+		<!-- 测试数据 -->
+		<!-- 	<view class="" style="margin-top: 40rpx;" >
+					<van-swipe-cell right-width="130">
 						<view class="swipe">
 							<view class="swipetop">
 								<view class="switopimg">
@@ -40,20 +21,22 @@
 								</view>
 								<view class="swimessage">
 									<text>学习</text><br/>
-									<text>{{item.id}}</text>
+									<text>aaa</text>
 								</view>
 								<view class="creattime">
-									{{item.createdtime}}
+									dadada大大
 								</view>
 							</view>
 							<view class="swipebottom">
-								备注：{{item.ramark}}
+								备注：迪卡龙发卡量副科级
 							</view>
 						</view>
 						<view slot="right" class="delpw">删除</view>
-					</van-swipe-cell> -->
-					
-				<view class="" v-for="item in storagedata" style="margin-top: 40rpx;">
+					</van-swipe-cell>
+			</view>
+		-->
+	
+				<view class="" v-for="item in storagedata" style="margin-top: 40rpx;" >
 					<van-swipe-cell right-width="130">
 						<view class="swipe">
 							<view class="swipetop">
@@ -112,7 +95,8 @@
 				storagedata: [],
 				boole: false,
 				bgdata: ['#4CD964','#007AFF','#9932CC','#F0E68C','#D2691E','#000000'],
-				imagetype: ''
+				imagetype: '',
+				value: ''
 			}
 		},
 		onLoad() {
@@ -120,6 +104,7 @@
 		},
 		onShow(){
 			this.init()
+			this.value = ''
 		},
 		methods: {
 			iinit(){
